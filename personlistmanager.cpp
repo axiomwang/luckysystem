@@ -4,8 +4,11 @@
 #include <QFile>
 #include<QTextStream>
 #include<QStringList>
+#include "person.h"
+
+#ifdef Q_OS_WIN
 #include <QAxObject>
-#include<person.h>
+#endif
 
 
 PersonListManager::PersonListManager()
@@ -86,6 +89,11 @@ bool PersonListManager::importCsv(const QString &filePath,int nameColumn){
 //实现对exl的导入
 bool PersonListManager::importExl(const QString &filePath, int nameColumn)
 {
+#ifndef Q_OS_WIN
+    Q_UNUSED(filePath)
+    Q_UNUSED(nameColumn)
+    return false;
+#else
     //创建Excel应用程序对象并设置为不可见
     QAxObject* excel = new QAxObject("Excel.Application");
     excel->dynamicCall("SetVisible(bool)", false);
@@ -124,6 +132,7 @@ bool PersonListManager::importExl(const QString &filePath, int nameColumn)
     delete excel;
 
     return true;
+#endif
 }
 //根据文件后缀来决定使用什么策略
 bool PersonListManager::importFile(const QString &filePath,int nameColumn){
@@ -131,7 +140,7 @@ bool PersonListManager::importFile(const QString &filePath,int nameColumn){
         return importTxt(filePath);
     }else if(filePath.endsWith(".csv",Qt::CaseInsensitive)){
         return importCsv(filePath,nameColumn);
-    }else if(filePath.endsWith("xlsx",Qt::CaseInsensitive)){
+    }else if(filePath.endsWith(".xlsx",Qt::CaseInsensitive)){
         return importExl(filePath,nameColumn);
     }else{
         return false;
@@ -147,8 +156,6 @@ bool PersonListManager::saveFile(const QStringList& names,const QString& filePat
     }
 
     QTextStream out(&file);
-    out.setCodec("UTF-8");
-
     out<<"姓名\n";
     for(const QString& name:names){
         out<<name<<"\n";

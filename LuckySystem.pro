@@ -5,7 +5,15 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT += axcontainer  # 启用ActiveX支持
+
+win32 {
+    QT += axcontainer
+}
+
+macx {
+    QMAKE_CXXFLAGS += -Wno-error=implicit-function-declaration -Wno-implicit-function-declaration
+    CONFIG += sdk_no_version_check
+}
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,8 +30,6 @@ SOURCES += \
     widget.cpp \
     personlistmanager.cpp \
     rafflemode.cpp \
-    singlemode.cpp \
-    mutiplemode.cpp \
     nameinterface.cpp \
     namesetting.cpp \
     participantinterface.cpp \
@@ -39,8 +45,6 @@ HEADERS += \
     personlistmanager.h \
     config.h \
     rafflemode.h \
-    singlemode.h \
-    multiplemode.h \
     nameinterface.h \
     namesetting.h \
     participantinterface.h \

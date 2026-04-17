@@ -2,7 +2,7 @@
 #define PERSONLISTMANAGER_H
 #include <QStringList>
 #include<QList>
-#include<person.h>
+#include "person.h"
 
 class PersonListManager
 {

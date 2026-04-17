@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include<QFileDialog>
+#include <QMouseEvent>
 
 namespace Ui {
 class NameInterface;
@@ -15,7 +16,7 @@ class NameInterface : public QWidget
 public:
     explicit NameInterface(QWidget *parent = 0);
     ~NameInterface();
-    void mousePressEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
     void slideShow();
 
 private:
